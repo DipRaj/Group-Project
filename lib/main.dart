@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
+import 'package:group_project/screens/screens.dart';
+void main() => runApp(App());
 
 // This is the main class
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
     );
   }
 }
