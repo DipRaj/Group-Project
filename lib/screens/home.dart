@@ -29,14 +29,60 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading:
-              IconButton(icon: Icon(FontAwesomeIcons.bars), onPressed: null),
-          centerTitle: true,
-          actions: [
+          backgroundColor: Colors.white70,
+          //leading:
+          //  IconButton(icon: Icon(FontAwesomeIcons.bars), onPressed: null),
+          // centerTitle: true,
+          actions: <Widget>[
             IconButton(icon: Icon(FontAwesomeIcons.search), onPressed: null),
             IconButton(icon: Icon(FontAwesomeIcons.heart), onPressed: null),
           ],
+        ),
+
+        drawer: Container(
+          width: 300,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(45),
+              bottomRight: Radius.circular(45),
+            ),
+            child: Drawer(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 80),
+                child: Container(
+                  color: Colors.white70,
+                  child: new ListView(
+                    children: <Widget>[
+                      MyExtractedWidget(
+                        theIcon: Icons.home,
+                        theText: "HOME",
+                      ),
+                      MyExtractedWidget(
+                        theIcon: Icons.shopping_basket,
+                        theText: "CATEGORIES",
+                      ),
+                      MyExtractedWidget(
+                        theIcon: Icons.notifications_active,
+                        theText: "NOTIFICATION",
+                      ),
+                      MyExtractedWidget(
+                        theIcon: Icons.check_box,
+                        theText: "SAFETY TIPS",
+                      ),
+                      MyExtractedWidget(
+                        theIcon: Icons.question_answer,
+                        theText: "FAQ",
+                      ),
+                      MyExtractedWidget(
+                        theIcon: Icons.note_add,
+                        theText: "AD POSTING RULES ",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
 
         // The body part
@@ -46,14 +92,11 @@ class _HomePageState extends State<HomePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    'Special For You',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  'Special For You',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 CarouselImage(),
@@ -82,6 +125,34 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyExtractedWidget extends StatelessWidget {
+  final IconData theIcon;
+  final String theText;
+  MyExtractedWidget({this.theIcon, this.theText});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Container(
+        child: ListTile(
+          leading: Icon(
+            theIcon,
+            size: 30,
+          ),
+          title: Text(
+            theText,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
