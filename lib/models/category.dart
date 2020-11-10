@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class Category {
 
-  final String name;
+  final String category;
   final IconData icon;
 
-  Category({this.name, this.icon});
+  Category({this.category, this.icon});
   
 }     

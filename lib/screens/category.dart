@@ -1,45 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:group_project/models/models.dart';
-import 'package:group_project/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:group_project/data/data.dart';
+import 'package:group_project/widgets/navbar_widget.dart';
 
-class CategoryPage extends StatelessWidget {
+class CategoryPage extends StatefulWidget {
   static String id = 'categoryPage';
 
-  final List<Category> categories;
-  final Function onPressed;
+  @override
+  _CategoryPageState createState() => _CategoryPageState();
+}
 
-  const CategoryPage({Key key, this.categories, this.onPressed})
-      : super(key: key);
+class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: Align(
+          alignment: Alignment.centerLeft,
           child: Text(
             'Categories',
-            style: widgetTitleTextStyle,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        Container(
-          height: 50.0,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Icon(
-                  categories[index].icon,
-                ),
-                title: Text(
-                  categories[index].name,
-                ),
-              );
-            },
-          ),
+      ),
+      body: SafeArea(
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      categories[index].category,
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                    trailing: Icon(
+                      categories[index].icon,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          itemCount: categories.length,
         ),
-      ],
+      ),
     );
   }
 }

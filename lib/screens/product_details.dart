@@ -1,27 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:group_project/models/products.dart';
 import 'package:group_project/ui/size_config.dart';
 import 'package:group_project/widgets/widgets.dart';
 import 'package:group_project/data/data.dart';
-// import 'package:group_project/widgets/product_carousel_widget.dart';
 
-class ProductsPage extends StatefulWidget {
-  final String id = 'productPage';
-  final List<Products> product;
-  final int index;
+class ProductDetailsPage extends StatefulWidget {
+  final Products product;
 
-  const ProductsPage({Key key, this.product, this.index}) : super(key: key);
+  const ProductDetailsPage({Key key, this.product}) : super(key: key);
+
 
   @override
-  _ProductsPageState createState() => _ProductsPageState();
+  _ProductDetailsPageState createState() => _ProductDetailsPageState();
+
 }
 
-class _ProductsPageState extends State<ProductsPage> {
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
+
   Size size;
   String btnName = 'Show Description';
-  bool visible = false;
+  bool visible = true;
   IconData iconStatus = EvaIcons.chevronDown;
   bool isPreviewed;
 
@@ -30,7 +29,7 @@ class _ProductsPageState extends State<ProductsPage> {
 //Changes to next item
   void _next() {
     setState(() {
-      if (currentIndex < products.length - 1) {
+      if (currentIndex < widget.product.images.length - 1) {
         currentIndex++;
       } else {
         currentIndex = 0;
@@ -43,7 +42,7 @@ class _ProductsPageState extends State<ProductsPage> {
       if (currentIndex > 0) {
         currentIndex--;
       } else {
-        currentIndex = products.length - 1;
+        currentIndex = widget.product.images.length - 1;
       }
     });
   }
@@ -65,7 +64,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xfff0f0f0),
+//      backgroundColor: Color(0xfff0f0f0),
       body: ListView(
         children: [
           Column(
@@ -81,30 +80,84 @@ class _ProductsPageState extends State<ProductsPage> {
                 },
 
                 //Image Container
-                child: Container(
-                  height: 233.33 * SizeConfig.heightMultiplier,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(product[index].imgUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        height: 40,
-                        width: 130.0,
-                        child: Row(
-                          children: _buildIndicator(),
+                child: Stack(
+                  children: [
+
+                    Container(
+                      height: 233.33 * SizeConfig.heightMultiplier,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(widget.product.images[0]),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ],
-                  ),
-                  ),
+                      child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            height: 40,
+                            width: 80.0,
+                            child: Row(
+                              children: _buildIndicator(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ),
+                    ),
+
+                    //Back Arrow Icon
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context, MaterialPageRoute);
+                        },
+                        child: Icon(
+                          EvaIcons.arrowBack,
+                          color: Colors.grey,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+
+                    //next and prev icon
+                    Positioned(
+                      top: 111 * SizeConfig.heightMultiplier,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _prev();
+                              },
+                              child: Icon(
+                                EvaIcons.chevronLeft,
+                                size: 40.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _next();
+                              },
+                              child: Icon(
+                                EvaIcons.chevronRight,
+                                size: 40.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -147,8 +200,8 @@ class _ProductsPageState extends State<ProductsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(product[index].productName),
-                          Text('Rs. 125000'),
+                          Text(widget.product.productName),
+                          Text(widget.product.price.toString()),
                         ],
                       ),
                       SizedBox(
@@ -157,7 +210,9 @@ class _ProductsPageState extends State<ProductsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('(Used)'),
+                          Text(
+                            widget.product.isUsed == true ? 'Used' : 'Brand New',
+                          ),
                           Text('Condition: Good'),
                         ],
                       ),
@@ -165,7 +220,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         height: 20.0,
                       ),
                       Text(
-                        'This is iphone 11 pro max, 64 GB variant. The size of the mobile phone is 6.5 inches. Released 2019, September ',
+                        widget.product.productDesc,
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -179,8 +234,8 @@ class _ProductsPageState extends State<ProductsPage> {
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: CustomButton(
-                                icon: Icons.shopping_cart,
-                                btnName: 'Add to Cart',
+                                icon: EvaIcons.heartOutline,
+                                btnName: 'Add to Watchlist',
                                 height: 25.0 * SizeConfig.heightMultiplier,
                                 buttonColor: Colors.white,
                                 mainAxisAlignment:
@@ -220,35 +275,16 @@ class _ProductsPageState extends State<ProductsPage> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  bottom: 10.0,
-                ),
-                alignment: Alignment.topLeft,
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Similar Products',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
-                  ),
-                ),
-              ),
-
-//            Similar Products ListView
               ProductCarousel(
+                productTypeText: 'Similar Products',
                 products: products,
                 size: size,
-                category: products[currentIndex].category,
+                category: widget.product.category,
               ),
             ],
           ),
         ],
       ),
-      bottomNavigationBar: NavBar(),
     );
   }
 
@@ -256,11 +292,11 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget _indicator(bool isPreviewed) {
     return Expanded(
       child: Container(
-        height: isPreviewed ? 7 : 5,
+        height: isPreviewed ? 5 : 5,
         margin: EdgeInsets.only(right: 5.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: isPreviewed ? Colors.grey[800] : Colors.white,
+          borderRadius: BorderRadius.circular(4.0),
+          color: isPreviewed ? Colors.white : Colors.grey[800],
         ),
       ),
     );
@@ -268,7 +304,7 @@ class _ProductsPageState extends State<ProductsPage> {
   //build indicators
   List<Widget> _buildIndicator() {
     List<Widget> indicators = [];
-    for (int i = 0; i < products.length; i++) {
+    for (int i = 0; i < widget.product.images.length; i++) {
       if (currentIndex == i) {
         indicators.add(_indicator(true));
       } else {
